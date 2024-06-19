@@ -1,0 +1,326 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<h1 class="alert alert-primary">Ajax İşlemleri</h1>
+
+<button class="btn btn-outline-primary" id="btnList" type="button">Ürün Listesi</button>
+<button class="btn btn-outline-info" id="btnCreate" data-bs-toggle="modal" data-bs-target="#Modal" type="button">Ürün Ekle</button>
+<button class="btn btn-outline-danger" id="btnDelete" data-bs-toggle="modal" data-bs-target="#Modal1" type="button">Ürün Sil</button>
+<button class="btn btn-outline-success" id="btnGet" data-bs-toggle="modal" data-bs-target="#Modal2" type="button">Ürün Getir</button>
+<button class="btn btn-outline-warning" id="btnUpdate" data-bs-toggle="modal" data-bs-target="#Modal3" type="button">Ürün Güncelle</button>
+<hr />
+<!--Ürün Listeleme-->
+<div id="productList" class="mt-3"></div>
+<!--Ekleme Modal-->
+<div class="modal" id="Modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Ürün Ekle</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form>
+				<div class="modal-body">
+					<div id="errorMessage" class="text-danger"></div>
+					<div class="form-group">
+						<input type="text" name="Name" id="productName" class="form-control mb-3" placeholder="Ürün Adı" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Price" id="productPrice" class="form-control mb-3" placeholder="Fiyat" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Stock" id="productStock" class="form-control mb-3" placeholder="Stok" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="ImageUrl" id="productImage" class="form-control mb-3" placeholder="Ürün Görseli" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+					<button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+<!--Silme Modal-->
+<div class="modal" id="Modal1" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Ürün Sil</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form>
+				<div class="modal-body">
+					<div class="form-group">
+						<input type="text" id="productId" class="form-control mb-3" placeholder="Silmek İstediğiniz Ürünün ID'si" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+					<button type="button" id="btnRemove" class="btn btn-danger">Sil</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+<!--ID'ye göre Modal-->
+<div class="modal" id="Modal2" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Ürün Getir</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form>
+				<div class="modal-body">
+					<div class="form-group">
+						<input type="text" id="getProductId" class="form-control mb-3" placeholder="Getirmek İstediğiniz Ürünün ID'si" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+					<button type="button" id="getProductBtn" class="btn btn-primary">Ürün Getir</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+<hr />
+<div id="getProductInfo" class="mt-3"></div>
+<!--Ürün Güncelleme-->
+<div class="modal" id="Modal3" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Ürün Güncelle</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form>
+				<div class="modal-body">
+					<div id="errorMessage2" class="text-danger"></div>
+					<div class="form-group">
+						<input type="text" name="ProductId" id="updateProductId" class="form-control mb-3" placeholder="Ürün ID" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Name" id="updateProductName" class="form-control mb-3" placeholder="Ürün Adı" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Price" id="updateProductPrice" class="form-control mb-3" placeholder="Fiyat" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Stock" id="updateProductStock" class="form-control mb-3" placeholder="Stok" />
+					</div>
+					<div class="form-group">
+						<input type="text" name="ImageUrl" id="updateProductImage" class="form-control mb-3" placeholder="Ürün Görseli" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+					<button type="button" id="updateBtnSave" class="btn btn-primary">Kaydet</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+<script>
+	//Listeleme
+	document.querySelector("#btnList").addEventListener("click", () => {
+		$.ajax({
+			contentType: "application/json",
+			dataType: "json",
+			type: 'get',
+			url: "/Default/ProductList",
+
+			success: function (func) {
+				let products = jQuery.parseJSON(func);
+				console.log(products.length);
+				if (products.length <= 0) {
+					let html = "<div class='alert alert-warning'>Listelenecek herhangi bir ürün bulunamadı.</div>"
+					$("#productList").html(html);
+				} else {
+					var productTable = `<table id="allproductlist" class='table table-striped'><tr><td>#</td><td>Ürün Adı</td><td>Fiyatı</td><td>Stok</td></tr>`;
+					$.each(products, (index, value) => {
+						productTable += `<tr><td>${value.ProductId}</td><td><img src='${value.ImageUrl}'style="width:100px;height:100px;" class="img-thumbnail" /> ${value.Name}</td><td>${value.Price}</td><td>${value.Stock}</td></tr>`;
+					});
+					productTable += `</table>`;
+					$("#productList").html(productTable);
+				}
+			}
+		});
+	});
+	//Ekleme
+	$("#btnSave").click(() => {
+		event.preventDefault();
+		let name = $("#productName").val();
+		let price = $("#productPrice").val();
+		let stock = $("#productStock").val();
+		let image = $("#productImage").val();
+		let values = {
+			Name: name,
+			Price: price,
+			Stock: stock,
+			ImageUrl: image,
+		};
+		$.ajax({
+			method: "post",
+			url: "/Default/CreateProduct",
+			data: values,
+			success: function () {
+				Swal.fire({
+					position: "top-end",
+					icon: "success",
+					title: "Kayıt başarıyla eklendi",
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$("#productName").val("");
+				$("#productPrice").val("");
+				$("#productStock").val("");
+				$("#productImage").val("");
+				$("#Modal").modal('hide');
+				let html = `<tr><td>#</td><td><img src='${image}'style="width:100px;height:100px;" class="img-thumbnail" /> ${name}</td><td>${price}</td><td>${stock}</td></tr>`;
+				$("#allproductlist").append(html);
+				
+			},
+			error: function (response) {
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Alanlar boş geçilemez!",
+				});
+				var errors = response.responseJSON.errors;
+				console.log(errors);
+				var errorMessages = '';
+				$.each(errors, (key, value) => {
+					errorMessages += '<p>' + value + '</p>';
+				});
+				$("#errorMessage").html(errorMessages);
+			}
+		});
+	});
+	//Silme
+	$("#btnRemove").click(() => {
+		let productId = $("#productId").val();
+		console.log(productId);
+		$.ajax({
+			method: 'get',
+			contentType: "application/json",
+			dataType: "json",
+			url: "/Default/DeleteProduct/",
+			data: { id: productId },
+			success: function () {
+				$("#Modal1").modal('hide');
+				Swal.fire({
+					position: "top-end",
+					icon: "success",
+					title: "Kayıt başarıyla silindi",
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$("#productId").val("");
+				$("#btnList").click();
+			},
+			error: function (error) {
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: error["responseJSON"].error,
+				});
+
+				}
+		});
+	});
+	//ID'ye göre getirme
+	$("#getProductBtn").click(() => {
+		let productId = $("#getProductId").val();
+		console.log(productId);
+		$.ajax({
+			contentType: "application/json",
+			dataType: "json",
+			type: "get",
+			url: "/Default/GetProduct/",
+			data: { id: productId },
+			success: function (func) {
+				let result = jQuery.parseJSON(func);
+				console.log(result);
+				$("#getProductInfo").addClass("alert alert-warning");
+				if (result != null) {
+					let html = `<h5>ID'ye Göre Getirilen Ürün</h5><div class='card' style='width:25%'><div class='card-header'>${result.Name}</div><div class='card-body'><img src="${result.ImageUrl}" style="width:100%;height:300px;" /></br><strong>Fiyat: </strong>${result.Price} ₺</br><strong>Stok: </strong>${result.Stock}</div></div`;
+					$("#getProductInfo").html(html);
+				} else {
+					$("#getProductInfo").html(`<h5>Aratılan ID'ye göre ürün bulunamadı.</h5>`);
+				}
+				$("#getProductId").val("");
+			},
+			error: function (error) {
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: error["responseJSON"].error,
+				});
+			}
+		});
+	});
+	//Ürün Güncelleme
+	$("#updateBtnSave").click(() => {
+		let productId = $("#updateProductId").val();
+		let productName = $("#updateProductName").val();
+		let productPrice = $("#updateProductPrice").val();
+		let productStock = $("#updateProductStock").val();
+		let productImage = $("#updateProductImage").val();
+		let values = {
+			ProductId: productId,
+			Name: productName,
+			Stock: productStock,
+			Price: productPrice,
+			ImageUrl: productImage
+		};
+		console.log(values);
+		$.ajax({
+			method: "post",
+			url: "/Default/UpdateProduct/",
+			data: values,
+			success: function () {
+				$("#Modal3").modal('hide');
+				Swal.fire({
+					position: "top-end",
+					icon: "success",
+					title: "Kayıt başarıyla güncellendi.",
+					showConfirmButton: false,
+					timer: 1500
+				});
+				$("#updateProductId").val("");
+				$("#updateProductName").val("");
+				$("#updateProductPrice").val("");
+				$("#updateProductStock").val("");
+				$("#updateProductImage").val("");
+			},
+			error: function (response) {
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: response["responseJSON"].errors,
+				});
+				var errors = response.responseJSON.errors;
+				console.log(errors);
+				var errorMessages = '';
+				$.each(errors, (key, value) => {
+					errorMessages += '<p>' + value + '</p>';
+				});
+				$("#errorMessage2").html(errorMessages);
+			}
+		});
+	});
+
+</script>
